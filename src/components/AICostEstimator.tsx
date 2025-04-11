@@ -39,7 +39,7 @@ export default function AICostEstimator({ onEstimationComplete }: AICostEstimato
 
     try {
       // Initialize Gemini API
-      const genAI = new GoogleGenerativeAI("AIzaSyC7KtD_jo0yC1n8tKw0DFiCSL0fm-S75yA");
+      const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
       const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
       // Create the prompt with context about construction estimation

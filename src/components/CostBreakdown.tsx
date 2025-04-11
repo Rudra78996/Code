@@ -22,23 +22,20 @@ export default function CostBreakdown({ breakdown }: CostBreakdownProps) {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-600">
-              {Object.entries(breakdown.materials).map(([materialId, details]) => {
-                const material = MATERIALS.find(m => m.id === materialId);
-                return (
-                  <tr key={materialId} className="hover:bg-gray-700/70 transition-colors">
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">{material?.name}</td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300 text-right">
-                      {details.quantity} {material?.unit}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300 text-right">
-                      ${details.unitCost.toFixed(2)}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-blue-400 text-right font-medium">
-                      ${details.totalCost.toFixed(2)}
-                    </td>
-                  </tr>
-                );
-              })}
+              {Object.entries(breakdown.materials).map(([materialId, details]) => (
+                <tr key={materialId} className="hover:bg-gray-700/70 transition-colors">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">{details.name}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300 text-right">
+                    {details.quantity} {details.unit}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300 text-right">
+                    ${details.unitCost.toFixed(2)}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-blue-400 text-right font-medium">
+                    ${details.totalCost.toFixed(2)}
+                  </td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>
@@ -57,21 +54,18 @@ export default function CostBreakdown({ breakdown }: CostBreakdownProps) {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-600">
-              {Object.entries(breakdown.labor).map(([laborId, details]) => {
-                const labor = LABOR.find(l => l.id === laborId);
-                return (
-                  <tr key={laborId} className="hover:bg-gray-700/70 transition-colors">
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">{labor?.role}</td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300 text-right">{details.hours}</td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300 text-right">
-                      ${details.hourlyRate.toFixed(2)}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-blue-400 text-right font-medium">
-                      ${details.totalCost.toFixed(2)}
-                    </td>
-                  </tr>
-                );
-              })}
+              {Object.entries(breakdown.labor).map(([laborId, details]) => (
+                <tr key={laborId} className="hover:bg-gray-700/70 transition-colors">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">{details.role}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300 text-right">{details.hours}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300 text-right">
+                    ${details.hourlyRate.toFixed(2)}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-blue-400 text-right font-medium">
+                    ${details.totalCost.toFixed(2)}
+                  </td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>

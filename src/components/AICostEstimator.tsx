@@ -7,17 +7,15 @@ interface AICostEstimatorProps {
   onEstimationComplete: (details: ProjectDetails) => void;
 }
 function extractAndParseJSON(str: string) {
-  // Match the JSON block between the first '{' and the last '}'
   const jsonMatch = str.match(/{[\s\S]*}/);
   if (!jsonMatch) {
     throw new Error("JSON object not found.");
   }
 
-  // Clean up the JSON string:
   let cleaned = jsonMatch[0]
-    .replace(/\/\/.*$/gm, '') // Remove inline comments
-    .replace(/,\s*}/g, '}')   // Remove trailing commas before }
-    .replace(/,\s*]/g, ']');  // Remove trailing commas before ]
+    .replace(/\/\/.*$/gm, '') 
+    .replace(/,\s*}/g, '}')   
+    .replace(/,\s*]/g, ']');  
 
   try {
     return JSON.parse(cleaned);
@@ -38,11 +36,9 @@ export default function AICostEstimator({ onEstimationComplete }: AICostEstimato
     setEstimation(null);
 
     try {
-      // Initialize Gemini API
       const genAI = new GoogleGenerativeAI(import.meta.env.VITE_GEMINI_API_KEY || "");
       const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
-      // Create the prompt with context about construction estimation
       const prompt = `
         As a construction cost estimation expert, analyze this project description and provide estimates.
         Consider the following aspects:
@@ -86,18 +82,13 @@ export default function AICostEstimator({ onEstimationComplete }: AICostEstimato
         4. Provide reasonable estimates based on the project description
       `;
 
-      // Generate response
       const result = await model.generateContent(prompt);
       const text = await result.response.text();
 
-      // Parse the JSON response
-     // console.log(text);
       
       const parsedEstimation = extractAndParseJSON(text);
-      //console.log(parsedEstimation);
       
 
-      // Transform the parsed data to match our ProjectDetails type
       const transformedEstimation: ProjectDetails = {
         projectName: parsedEstimation.projectName,
         length: parsedEstimation.length,

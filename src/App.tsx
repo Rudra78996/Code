@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import { Routes, Route, Link, useLocation } from 'react-router-dom';
 import { supabase } from './lib/supabase';
 import Auth from './components/Auth';
 import Header from './components/Header';
@@ -21,6 +21,7 @@ function App() {
     materials: [],
     labor: [],
   });
+  const location = useLocation();
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -89,100 +90,106 @@ function App() {
   }
 
   return (
-    <Router>
-      <div className="min-h-screen bg-gray-900 text-gray-100">
-        <Header userEmail={session.user?.email} />
-        
-        <main className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-          <nav className="mb-6">
-            <ul className="flex space-x-4 text-sm md:text-base">
-              <li>
-                <Link 
-                  to="/" 
-                  className="px-4 py-2 rounded-lg hover:bg-gray-800 transition-colors"
-                >
-                  Manual Estimation
-                </Link>
-              </li>
-              <li>
-                <Link 
-                  to="/ai-estimator" 
-                  className="px-4 py-2 rounded-lg hover:bg-gray-800 transition-colors"
-                >
-                  AI Estimator
-                </Link>
-              </li>
-            </ul>
-          </nav>
+    <div className="min-h-screen bg-gray-900 text-gray-100">
+      <Header userEmail={session.user?.email} />
+      
+      <main className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+        <nav className="mb-6">
+          <ul className="flex space-x-4 text-sm md:text-base">
+            <li>
+              <Link 
+                to="/" 
+                className={`px-4 py-2 rounded-lg transition-all duration-200 ${
+                  location.pathname === '/' 
+                    ? 'bg-gray-800 shadow-lg shadow-blue-500/20 border border-gray-700' 
+                    : 'hover:bg-gray-800/50'
+                }`}
+              >
+                Manual Estimation
+              </Link>
+            </li>
+            <li>
+              <Link 
+                to="/ai-estimator" 
+                className={`px-4 py-2 rounded-lg transition-all duration-200 ${
+                  location.pathname === '/ai-estimator' 
+                    ? 'bg-gray-800 shadow-lg shadow-purple-500/20 border border-gray-700' 
+                    : 'hover:bg-gray-800/50'
+                }`}
+              >
+                AI Estimator
+              </Link>
+            </li>
+          </ul>
+        </nav>
 
-          <Routes>
-            <Route path="/" element={
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6">
-                <div className="lg:col-span-2">
-                  <div className="bg-gray-800 rounded-lg md:rounded-xl shadow-xl md:shadow-2xl p-4 md:p-6 border border-gray-700">
-                    <div className="mb-6 md:mb-8">
-                      <h2 className="text-xl md:text-2xl font-medium text-gray-100">Project Details</h2>
-                      <p className="mt-1 text-sm md:text-base text-gray-400">
-                        Enter your project specifications to get an accurate cost estimation.
-                      </p>
-                    </div>
-                    
-                    <ProjectForm onSubmit={handleProjectSubmit} initialValues={currentProject} />
-
-                    {costBreakdown && (
-                      <div className="mt-6 md:mt-8 pt-6 md:pt-8 border-t border-gray-700">
-                        <h2 className="text-xl md:text-2xl font-medium text-gray-100 mb-4 md:mb-6">Cost Breakdown</h2>
-                        <CostBreakdown breakdown={costBreakdown} />
-                      </div>
-                    )}
-                  </div>
-                </div>
-
+        <Routes>
+          <Route path="/" element={
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6">
+              <div className="lg:col-span-2">
                 <div className="bg-gray-800 rounded-lg md:rounded-xl shadow-xl md:shadow-2xl p-4 md:p-6 border border-gray-700">
-                  <h2 className="text-xl md:text-2xl font-medium text-gray-100 mb-3 md:mb-4">Previous Projects</h2>
-                  <ProjectHistory onProjectSelect={handleProjectSelect} />
+                  <div className="mb-6 md:mb-8">
+                    <h2 className="text-xl md:text-2xl font-medium text-gray-100">Project Details</h2>
+                    <p className="mt-1 text-sm md:text-base text-gray-400">
+                      Enter your project specifications to get an accurate cost estimation.
+                    </p>
+                  </div>
+                  
+                  <ProjectForm onSubmit={handleProjectSubmit} initialValues={currentProject} />
+
+                  {costBreakdown && (
+                    <div className="mt-6 md:mt-8 pt-6 md:pt-8 border-t border-gray-700">
+                      <h2 className="text-xl md:text-2xl font-medium text-gray-100 mb-4 md:mb-6">Cost Breakdown</h2>
+                      <CostBreakdown breakdown={costBreakdown} />
+                    </div>
+                  )}
                 </div>
               </div>
-            } />
 
-            <Route path="/ai-estimator" element={
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6">
-                <div className="lg:col-span-2">
-                  <div className="bg-gray-800 rounded-lg md:rounded-xl shadow-xl md:shadow-2xl p-4 md:p-6 border border-gray-700">
-                    <div className="mb-6 md:mb-8">
-                      <h2 className="text-xl md:text-2xl font-medium text-gray-100">AI Cost Estimator</h2>
-                      <p className="mt-1 text-sm md:text-base text-gray-400">
-                        Describe your project and let AI generate a cost estimation for you.
-                      </p>
-                    </div>
+              <div className="bg-gray-800 rounded-lg md:rounded-xl shadow-xl md:shadow-2xl p-4 md:p-6 border border-gray-700">
+                <h2 className="text-xl md:text-2xl font-medium text-gray-100 mb-3 md:mb-4">Previous Projects</h2>
+                <ProjectHistory onProjectSelect={handleProjectSelect} />
+              </div>
+            </div>
+          } />
 
-                    <AICostEstimator 
-                      onEstimationComplete={(details) => {
-                        setCurrentProject(details);
-                        const breakdown = calculateCosts(details);
-                        setCostBreakdown(breakdown);
-                      }} 
-                    />
-
-                    {costBreakdown && (
-                      <div className="mt-6 md:mt-8 pt-6 md:pt-8 border-t border-gray-700">
-                        <h2 className="text-xl md:text-2xl font-medium text-gray-100 mb-4 md:mb-6">Cost Breakdown</h2>
-                        <CostBreakdown breakdown={costBreakdown} />
-                      </div>
-                    )}
-                  </div>
-                </div>
-
+          <Route path="/ai-estimator" element={
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6">
+              <div className="lg:col-span-2">
                 <div className="bg-gray-800 rounded-lg md:rounded-xl shadow-xl md:shadow-2xl p-4 md:p-6 border border-gray-700">
-                  <h2 className="text-xl md:text-2xl font-medium text-gray-100 mb-3 md:mb-4">Previous Projects</h2>
-                  <ProjectHistory onProjectSelect={handleProjectSelect} />
+                  <div className="mb-6 md:mb-8">
+                    <h2 className="text-xl md:text-2xl font-medium text-gray-100">AI Cost Estimator</h2>
+                    <p className="mt-1 text-sm md:text-base text-gray-400">
+                      Describe your project and let AI generate a cost estimation for you.
+                    </p>
+                  </div>
+
+                  <AICostEstimator 
+                    onEstimationComplete={(details) => {
+                      setCurrentProject(details);
+                      const breakdown = calculateCosts(details);
+                      setCostBreakdown(breakdown);
+                    }} 
+                  />
+
+                  {costBreakdown && (
+                    <div className="mt-6 md:mt-8 pt-6 md:pt-8 border-t border-gray-700">
+                      <h2 className="text-xl md:text-2xl font-medium text-gray-100 mb-4 md:mb-6">Cost Breakdown</h2>
+                      <CostBreakdown breakdown={costBreakdown} />
+                    </div>
+                  )}
                 </div>
               </div>
-            } />
-          </Routes>
-        </main>
-      </div>
-    </Router>
+
+              <div className="bg-gray-800 rounded-lg md:rounded-xl shadow-xl md:shadow-2xl p-4 md:p-6 border border-gray-700">
+                <h2 className="text-xl md:text-2xl font-medium text-gray-100 mb-3 md:mb-4">Previous Projects</h2>
+                <ProjectHistory onProjectSelect={handleProjectSelect} />
+              </div>
+            </div>
+          } />
+        </Routes>
+      </main>
+    </div>
   );
 }
 

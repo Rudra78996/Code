@@ -1,6 +1,6 @@
 import React from 'react';
 import { HardHat, LogOut } from 'lucide-react';
-import { useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 
 interface HeaderProps {
@@ -8,7 +8,6 @@ interface HeaderProps {
 }
 
 export default function Header({ userEmail }: HeaderProps) {
-  const location = useLocation();
   const handleSignOut = async () => {
     await supabase.auth.signOut();
   };
@@ -17,12 +16,15 @@ export default function Header({ userEmail }: HeaderProps) {
     <header className="bg-gray-800 border-b border-gray-700">
       <div className="max-w-7xl mx-auto py-4 md:py-6 px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col md:flex-row items-center justify-between gap-4 md:gap-0">
-          <div className="flex items-center gap-2 md:gap-3">
+          <Link 
+            to="/" 
+            className="flex items-center gap-2 md:gap-3 hover:opacity-80 transition-opacity"
+          >
             <HardHat size={28} className="text-blue-400 md:size-32" />
             <h1 className="text-xl md:text-3xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
               Construction Cost Estimator
             </h1>
-          </div>
+          </Link>
           <div className="flex items-center gap-3 md:gap-4">
             <span className="text-sm md:text-base text-gray-300">{userEmail}</span>
             <button

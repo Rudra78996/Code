@@ -39,7 +39,7 @@ export default function AICostEstimator({ onEstimationComplete }: AICostEstimato
 
     try {
       // Initialize Gemini API
-      const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+      const genAI = new GoogleGenerativeAI(import.meta.env.VITE_GEMINI_API_KEY || "");
       const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
       // Create the prompt with context about construction estimation
@@ -137,7 +137,7 @@ export default function AICostEstimator({ onEstimationComplete }: AICostEstimato
           Describe Your Project
         </label>
         <textarea
-          className="w-full h-32 rounded-lg bg-gray-700 border-gray-600 text-white placeholder-gray-400 focus:border-blue-400 focus:ring-blue-400"
+          className="w-full h-32 rounded-lg bg-gray-700 border-gray-600 text-white placeholder-gray-400 focus:border-blue-400 focus:ring-blue-400 px-4 py-3"
           placeholder="Describe your construction project in detail (e.g., I want to build a two-story house with 3 bedrooms, 2 bathrooms, a kitchen, and a living room...)"
           value={projectDescription}
           onChange={(e) => setProjectDescription(e.target.value)}
@@ -171,25 +171,25 @@ export default function AICostEstimator({ onEstimationComplete }: AICostEstimato
           <div>
             <h3 className="text-lg font-medium text-gray-100 mb-4">Project Details</h3>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 bg-gray-700/50 rounded-lg p-4">
                 <Ruler size={20} className="text-blue-400" />
                 <div>
                   <p className="text-sm text-gray-400">Length</p>
-                  <p className="text-gray-100">{estimation.length}m</p>
+                  <p className="text-gray-100 px-2 py-1.5 bg-gray-700 rounded mt-1">{estimation.length}m</p>
                 </div>
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 bg-gray-700/50 rounded-lg p-4">
                 <Ruler size={20} className="text-blue-400" />
                 <div>
                   <p className="text-sm text-gray-400">Width</p>
-                  <p className="text-gray-100">{estimation.width}m</p>
+                  <p className="text-gray-100 px-2 py-1.5 bg-gray-700 rounded mt-1">{estimation.width}m</p>
                 </div>
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 bg-gray-700/50 rounded-lg p-4">
                 <Building2 size={20} className="text-blue-400" />
                 <div>
                   <p className="text-sm text-gray-400">Height</p>
-                  <p className="text-gray-100">{estimation.height}m</p>
+                  <p className="text-gray-100 px-2 py-1.5 bg-gray-700 rounded mt-1">{estimation.height}m</p>
                 </div>
               </div>
             </div>
@@ -204,13 +204,13 @@ export default function AICostEstimator({ onEstimationComplete }: AICostEstimato
               {estimation.materials.map((material) => (
                 <div key={material.id} className="bg-gray-700/50 p-4 rounded-lg">
                   <div className="flex justify-between items-start">
-                    <div>
+                    <div className="space-y-2">
                       <h4 className="text-gray-100 font-medium">{material.name}</h4>
-                      <p className="text-sm text-gray-400">{material.description || 'No description provided'}</p>
+                      <p className="text-sm text-gray-400 bg-gray-700 rounded px-3 py-2">{material.description || 'No description provided'}</p>
                     </div>
-                    <div className="text-right">
-                      <p className="text-gray-100">${material.costPerUnit.toFixed(2)}/{material.unit}</p>
-                      <p className="text-sm text-gray-400">Quantity: {material.quantity}</p>
+                    <div className="text-right space-y-2">
+                      <p className="text-gray-100 bg-gray-700 rounded px-3 py-2">${material.costPerUnit.toFixed(2)}/{material.unit}</p>
+                      <p className="text-sm text-gray-400 bg-gray-700 rounded px-3 py-2">Quantity: {material.quantity}</p>
                     </div>
                   </div>
                 </div>
@@ -227,13 +227,13 @@ export default function AICostEstimator({ onEstimationComplete }: AICostEstimato
               {estimation.labor.map((labor) => (
                 <div key={labor.id} className="bg-gray-700/50 p-4 rounded-lg">
                   <div className="flex justify-between items-start">
-                    <div>
+                    <div className="space-y-2">
                       <h4 className="text-gray-100 font-medium">{labor.role}</h4>
-                      <p className="text-sm text-gray-400">{labor.description || 'No description provided'}</p>
+                      <p className="text-sm text-gray-400 bg-gray-700 rounded px-3 py-2">{labor.description || 'No description provided'}</p>
                     </div>
-                    <div className="text-right">
-                      <p className="text-gray-100">${labor.costPerHour.toFixed(2)}/hour</p>
-                      <p className="text-sm text-gray-400">Hours: {labor.hours}</p>
+                    <div className="text-right space-y-2">
+                      <p className="text-gray-100 bg-gray-700 rounded px-3 py-2">${labor.costPerHour.toFixed(2)}/hour</p>
+                      <p className="text-sm text-gray-400 bg-gray-700 rounded px-3 py-2">Hours: {labor.hours}</p>
                     </div>
                   </div>
                 </div>

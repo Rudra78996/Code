@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Building2, Clock, Ruler, Plus, Trash2 } from 'lucide-react';
+import { Building2, Clock, Ruler, Plus, Trash2, X } from 'lucide-react';
 import { MATERIALS, LABOR } from '../data/constants';
 import { ProjectDetails, ProjectMaterial, ProjectLabor } from '../types';
 
@@ -177,72 +177,66 @@ export default function ProjectForm({ onSubmit, initialValues }: ProjectFormProp
             </button>
           </div>
           
-          <div className="space-y-3">
-            {projectDetails.materials.map(material => (
-              <div key={material.id} className="flex items-start gap-3 bg-gray-700/50 p-4 rounded-lg">
-                <div className="flex-1 grid grid-cols-1 md:grid-cols-4 gap-3">
+          <div className="space-y-4">
+            {projectDetails.materials.map((material) => (
+              <div key={material.id} className="bg-gray-700/50 p-4 rounded-lg">
+                <div className="flex justify-between items-center mb-2">
+                  <h4 className="text-sm font-medium text-gray-300">Material Details</h4>
+                  <button
+                    type="button"
+                    onClick={() => removeMaterial(material.id)}
+                    className="text-gray-400 hover:text-red-400"
+                  >
+                    <X size={20} />
+                  </button>
+                </div>
+                <div className="grid grid-cols-1 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-300">Name</label>
+                    <label className="block text-sm font-medium text-gray-300 mb-1">Material Name</label>
                     <input
                       type="text"
                       required
-                      className="mt-1 block w-full rounded-lg bg-gray-700 border-gray-600 text-white px-4 py-2.5"
+                      className="block w-full rounded-lg bg-gray-700 border-gray-600 text-white px-4 py-2.5"
                       value={material.name}
                       onChange={e => updateMaterial(material.id, 'name', e.target.value)}
                     />
                   </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-300">Unit</label>
-                    <input
-                      type="text"
-                      required
-                      className="mt-1 block w-full rounded-lg bg-gray-700 border-gray-600 text-white px-4 py-2.5"
-                      value={material.unit}
-                      onChange={e => updateMaterial(material.id, 'unit', e.target.value)}
-                    />
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-300 mb-1">Unit</label>
+                      <input
+                        type="text"
+                        required
+                        className="block w-full rounded-lg bg-gray-700 border-gray-600 text-white px-4 py-2.5"
+                        value={material.unit}
+                        onChange={e => updateMaterial(material.id, 'unit', e.target.value)}
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-300 mb-1">Cost per Unit</label>
+                      <input
+                        type="number"
+                        required
+                        min="0"
+                        step="0.01"
+                        className="block w-full rounded-lg bg-gray-700 border-gray-600 text-white px-4 py-2.5"
+                        value={material.costPerUnit || ''}
+                        onChange={e => updateMaterial(material.id, 'costPerUnit', parseFloat(e.target.value))}
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-300 mb-1">Quantity</label>
+                      <input
+                        type="number"
+                        required
+                        min="0"
+                        step="0.1"
+                        className="block w-full rounded-lg bg-gray-700 border-gray-600 text-white px-4 py-2.5"
+                        value={material.quantity || ''}
+                        onChange={e => updateMaterial(material.id, 'quantity', parseFloat(e.target.value))}
+                      />
+                    </div>
                   </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-300">Cost/Unit</label>
-                    <input
-                      type="number"
-                      required
-                      min="0"
-                      step="0.01"
-                      className="mt-1 block w-full rounded-lg bg-gray-700 border-gray-600 text-white px-4 py-2.5"
-                      value={material.costPerUnit || ''}
-                      onChange={e => updateMaterial(material.id, 'costPerUnit', parseFloat(e.target.value))}
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-300">Quantity</label>
-                    <input
-                      type="number"
-                      required
-                      min="0"
-                      step="0.1"
-                      className="mt-1 block w-full rounded-lg bg-gray-700 border-gray-600 text-white px-4 py-2.5"
-                      value={material.quantity || ''}
-                      onChange={e => updateMaterial(material.id, 'quantity', parseFloat(e.target.value))}
-                    />
-                  </div>
-                </div>
-                <div className="flex items-end gap-2">
-                  <div className="flex-1">
-                    <label className="block text-sm font-medium text-gray-300">Description</label>
-                    <input
-                      type="text"
-                      className="mt-1 block w-full rounded-lg bg-gray-700 border-gray-600 text-white px-4 py-2.5"
-                      value={material.description || ''}
-                      onChange={e => updateMaterial(material.id, 'description', e.target.value)}
-                    />
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => removeMaterial(material.id)}
-                    className="p-2 text-red-400 hover:text-red-300 transition-colors"
-                  >
-                    <Trash2 size={20} />
-                  </button>
                 </div>
               </div>
             ))}
@@ -262,62 +256,56 @@ export default function ProjectForm({ onSubmit, initialValues }: ProjectFormProp
             </button>
           </div>
           
-          <div className="space-y-3">
-            {projectDetails.labor.map(labor => (
-              <div key={labor.id} className="flex items-start gap-3 bg-gray-700/50 p-4 rounded-lg">
-                <div className="flex-1 grid grid-cols-1 md:grid-cols-3 gap-3">
+          <div className="space-y-4">
+            {projectDetails.labor.map((labor) => (
+              <div key={labor.id} className="bg-gray-700/50 p-4 rounded-lg">
+                <div className="flex justify-between items-center mb-2">
+                  <h4 className="text-sm font-medium text-gray-300">Labor Details</h4>
+                  <button
+                    type="button"
+                    onClick={() => removeLabor(labor.id)}
+                    className="text-gray-400 hover:text-red-400"
+                  >
+                    <X size={20} />
+                  </button>
+                </div>
+                <div className="grid grid-cols-1 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-300">Role</label>
+                    <label className="block text-sm font-medium text-gray-300 mb-1">Role</label>
                     <input
                       type="text"
                       required
-                      className="mt-1 block w-full rounded-lg bg-gray-700 border-gray-600 text-white px-4 py-2.5"
+                      className="block w-full rounded-lg bg-gray-700 border-gray-600 text-white px-4 py-2.5"
                       value={labor.role}
                       onChange={e => updateLabor(labor.id, 'role', e.target.value)}
                     />
                   </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-300">Cost/Hour</label>
-                    <input
-                      type="number"
-                      required
-                      min="0"
-                      step="0.01"
-                      className="mt-1 block w-full rounded-lg bg-gray-700 border-gray-600 text-white px-4 py-2.5"
-                      value={labor.costPerHour || ''}
-                      onChange={e => updateLabor(labor.id, 'costPerHour', parseFloat(e.target.value))}
-                    />
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-300 mb-1">Cost per Hour</label>
+                      <input
+                        type="number"
+                        required
+                        min="0"
+                        step="0.01"
+                        className="block w-full rounded-lg bg-gray-700 border-gray-600 text-white px-4 py-2.5"
+                        value={labor.costPerHour || ''}
+                        onChange={e => updateLabor(labor.id, 'costPerHour', parseFloat(e.target.value))}
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-300 mb-1">Hours</label>
+                      <input
+                        type="number"
+                        required
+                        min="0"
+                        step="0.5"
+                        className="block w-full rounded-lg bg-gray-700 border-gray-600 text-white px-4 py-2.5"
+                        value={labor.hours || ''}
+                        onChange={e => updateLabor(labor.id, 'hours', parseFloat(e.target.value))}
+                      />
+                    </div>
                   </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-300">Hours</label>
-                    <input
-                      type="number"
-                      required
-                      min="0"
-                      step="0.5"
-                      className="mt-1 block w-full rounded-lg bg-gray-700 border-gray-600 text-white px-4 py-2.5"
-                      value={labor.hours || ''}
-                      onChange={e => updateLabor(labor.id, 'hours', parseFloat(e.target.value))}
-                    />
-                  </div>
-                </div>
-                <div className="flex items-end gap-2">
-                  <div className="flex-1">
-                    <label className="block text-sm font-medium text-gray-300">Description</label>
-                    <input
-                      type="text"
-                      className="mt-1 block w-full rounded-lg bg-gray-700 border-gray-600 text-white px-4 py-2.5"
-                      value={labor.description || ''}
-                      onChange={e => updateLabor(labor.id, 'description', e.target.value)}
-                    />
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => removeLabor(labor.id)}
-                    className="p-2 text-red-400 hover:text-red-300 transition-colors"
-                  >
-                    <Trash2 size={20} />
-                  </button>
                 </div>
               </div>
             ))}

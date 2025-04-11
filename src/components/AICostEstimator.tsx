@@ -217,14 +217,20 @@ export default function AICostEstimator({ onEstimationComplete }: AICostEstimato
             <div className="space-y-4">
               {estimation.labor.map((labor) => (
                 <div key={labor.id} className="bg-gray-700/50 p-4 rounded-lg">
-                  <div className="flex justify-between items-start">
-                    <div className="space-y-2">
+                  <div className="flex flex-col sm:flex-row justify-between gap-4">
+                    <div className="space-y-2 flex-1">
                       <h4 className="text-gray-100 font-medium">{labor.role}</h4>
-                      <p className="text-sm text-gray-400 bg-gray-700 rounded px-3 py-2">{labor.description || 'No description provided'}</p>
+                      <p className="text-sm text-gray-400 bg-gray-700 rounded px-3 py-2 break-words">
+                        {labor.description || 'No description provided'}
+                      </p>
                     </div>
-                    <div className="text-right space-y-2">
-                      <p className="text-gray-100 bg-gray-700 rounded px-3 py-2">${labor.costPerHour.toFixed(2)}/hour</p>
-                      <p className="text-sm text-gray-400 bg-gray-700 rounded px-3 py-2">Hours: {labor.hours}</p>
+                    <div className="flex flex-row sm:flex-col justify-start sm:justify-end gap-4 sm:gap-2 flex-wrap sm:flex-nowrap">
+                      <p className="text-gray-100 bg-gray-700 rounded px-3 py-2 whitespace-nowrap">
+                        ${labor.costPerHour.toFixed(2)}/hour
+                      </p>
+                      <p className="text-sm text-gray-400 bg-gray-700 rounded px-3 py-2 whitespace-nowrap">
+                        Hours: {labor.hours}
+                      </p>
                     </div>
                   </div>
                 </div>

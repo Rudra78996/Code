@@ -3,12 +3,31 @@ export interface Material {
   name: string;
   unit: string;
   costPerUnit: number;
+  description?: string;
 }
 
 export interface Labor {
   id: string;
   role: string;
   costPerHour: number;
+  description?: string;
+}
+
+export interface ProjectMaterial {
+  id: string;
+  name: string;
+  unit: string;
+  costPerUnit: number;
+  quantity: number;
+  description?: string;
+}
+
+export interface ProjectLabor {
+  id: string;
+  role: string;
+  costPerHour: number;
+  hours: number;
+  description?: string;
 }
 
 export interface ProjectDetails {
@@ -16,14 +35,8 @@ export interface ProjectDetails {
   length: number;
   width: number;
   height: number;
-  materials: Array<{
-    materialId: string;
-    quantity: number;
-  }>;
-  labor: Array<{
-    laborId: string;
-    hours: number;
-  }>;
+  materials: ProjectMaterial[];
+  labor: ProjectLabor[];
 }
 
 export interface CostBreakdown {
@@ -32,6 +45,8 @@ export interface CostBreakdown {
       quantity: number;
       unitCost: number;
       totalCost: number;
+      name: string;
+      unit: string;
     };
   };
   labor: {
@@ -39,6 +54,7 @@ export interface CostBreakdown {
       hours: number;
       hourlyRate: number;
       totalCost: number;
+      role: string;
     };
   };
   totalMaterialCost: number;
@@ -55,14 +71,8 @@ export interface SavedProject {
     width: number;
     height: number;
   };
-  materials: Array<{
-    materialId: string;
-    quantity: number;
-  }>;
-  labor: Array<{
-    laborId: string;
-    hours: number;
-  }>;
+  materials: ProjectMaterial[];
+  labor: ProjectLabor[];
   total_cost: number;
   created_at: string;
 }
